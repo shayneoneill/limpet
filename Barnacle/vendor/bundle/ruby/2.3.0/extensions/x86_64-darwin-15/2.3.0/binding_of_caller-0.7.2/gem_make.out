@@ -1,0 +1,16 @@
+current directory: /Users/shayneoneill/Devel/Limpet/Barnacle/vendor/bundle/ruby/2.3.0/gems/binding_of_caller-0.7.2/ext/binding_of_caller
+/usr/local/opt/ruby/bin/ruby -r ./siteconf20160504-11204-1jms6dd.rb extconf.rb
+
+current directory: /Users/shayneoneill/Devel/Limpet/Barnacle/vendor/bundle/ruby/2.3.0/gems/binding_of_caller-0.7.2/ext/binding_of_caller
+make "DESTDIR=" clean
+make: *** No rule to make target `clean'.  Stop.
+
+current directory: /Users/shayneoneill/Devel/Limpet/Barnacle/vendor/bundle/ruby/2.3.0/gems/binding_of_caller-0.7.2/ext/binding_of_caller
+make "DESTDIR="
+echo "Nada."
+Nada.
+
+current directory: /Users/shayneoneill/Devel/Limpet/Barnacle/vendor/bundle/ruby/2.3.0/gems/binding_of_caller-0.7.2/ext/binding_of_caller
+make "DESTDIR=" install
+echo "Nada."
+Nada.
