@@ -1,6 +1,7 @@
 require "socket"
-require "./lib/SipPacket"
-require "./models/Models"
+require "./models/SipPacket"
+require "./models/PacketFactory"
+#require "./models/DataModels"
 class SipReciever
 
   def initialize (address, port)
@@ -21,11 +22,14 @@ class SipReciever
 end
 
 sip = SipReciever.new "0.0.0.0", 5060
-
+pf = PacketFactory.new
 sip.listen do |addr,msg,bytes|
-  puts "\nMessage from: %s #{addr}\n"
+  puts "\nMessage from: #{addr}\n"
   puts "==============================================\n"
   state = 0
   x = SipPacket.new
   x.interpret(addr,msg,bytes)
+  if x.@mode == :register
+    print pf.create_OK x
+  end
 end

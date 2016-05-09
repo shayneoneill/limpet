@@ -1,0 +1,17 @@
+name: active_record
+version: 0.4.1
+
+authors:
+- Oleksii Fedorov <waterlink000@gmail.com>
+
+license: MIT
+
+dependencies:
+  pool:
+    github: ysbaddaden/pool
+    version: ~> 0.2
+
+development_dependencies:
+  mocks:
+    github: waterlink/mocks.cr
+    branch: master

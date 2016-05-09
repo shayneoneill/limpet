@@ -1,0 +1,11 @@
+prefix=/usr/local
+exec_prefix=/usr/local
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libsrtp2
+Version: 2.0.0-pre
+Description: Library for SRTP (Secure Realtime Transport Protocol)
+
+Libs: -L${libdir} -lsrtp2 -lpcap -lcrypto -lcrypto -lcrypto -lz -ldl 
+Cflags: -I${includedir}
