@@ -21,7 +21,16 @@ class SipPacket
     @via = ""
     @rport = false
     @verbose = false
-    @branch = ""
+    @branch = "none"
+    @to = ""
+    @from = ""
+    @from_tag = ""
+    @cseq = 0
+    @cseq_type = ""
+    @contact_sip = ""
+    @contact_port = "5060"
+    @sip_name = ""
+    @title = ""
   end
 
   @[AlwaysInline]
@@ -30,6 +39,10 @@ class SipPacket
     s.each do |i|
       yield i
     end
+  end
+
+  def is_verbose
+    @verbose = true
   end
 
   def process
@@ -74,14 +87,16 @@ class SipPacket
         @can_forward = @max_forwards > 0
       when "Contact"
         log "Contact"
-        tokenize value do |v|
-          b = v.match(/\<(.*)\>/)
+        tokenize value," " do |v|
+          b = v.match(/\<(.*)\;/)
+          log "RESULTS",b
           if b
             c = b[1]
             split = c.split(':')
             if split[0] == "sip"
               @contact_sip = split[1]
               log "Contact SIP",@contact_sip
+              @contact_port = split[2]
             end
             if split[0] == "urn" #@todo This doesnt work yet. Worry about it later
               @contact_urn = split[1]
@@ -89,7 +104,7 @@ class SipPacket
             end
             log "CONTACT :",c
           else
-            log v
+            @sip_name = v
           end
         end
       when "To"
@@ -98,7 +113,7 @@ class SipPacket
         if b
           c = b[1]
           split = c.split(":")
-          @to = c[1]
+          @to = c
           log "TO :",@to
         end
         b = value.match(/tag\=(.*)/)
@@ -115,7 +130,7 @@ class SipPacket
           end
           b = v.match(/tag\=(.*)/)
           if b
-            @tag = b[1]
+            @from_tag = b[1]
             log "TAG",@from_tag
           end
         end
@@ -172,32 +187,35 @@ class SipPacket
     #dump @body
   end
 
-  def add_header(key,value : String)
-    @headers[key] = value
+  def heading (value)
+    @title = value
+  end
+
+  def add_header(key,value )
+    @headers[key] = value.to_s
   end
   def add_body(key,value)
-    @body[key] = value
+    @body[key] = value.to_s
   end
   def dump_packet
-    print "!!!!!!\n"
     r = String.build do |str|
+      str << @title
+      str << "\r\n"
       @headers.each_key do |v|
         str << v
         str << ": "
         str << @headers[v]
-        str << "\n"
+        str << "\r\n"
       end
-      str << "\n"
+      str << "\r\n"
       @body.each_key do |v|
         str << v
         str << "="
         str << @body[v]
-        str << "\n"
+        str << "\r\n"
       end
     end
     return r
   end
-
-
 
 end

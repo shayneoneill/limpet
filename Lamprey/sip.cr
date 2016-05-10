@@ -21,15 +21,23 @@ class SipReciever
   end
 end
 
-sip = SipReciever.new "0.0.0.0", 5060
+sip = SipReciever.new "127.0.0.1", 5060
 pf = PacketFactory.new
+client = UDPSocket.new
 sip.listen do |addr,msg,bytes|
   puts "\nMessage from: #{addr}\n"
   puts "==============================================\n"
   state = 0
-  x = SipPacket.new
-  x.interpret(addr,msg,bytes)
-  if x.@mode == :register
-    print pf.create_OK x
+  packet = SipPacket.new
+  packet.is_verbose
+  packet.interpret(addr,msg,bytes)
+  print packet.dump_packet
+  if packet.@mode == :register
+    client.connect addr.address,addr.port
+
+    reply = pf.create_OK packet
+    rep = reply.dump_packet
+    sip.@server.send(rep,addr)
+    print rep
   end
 end
